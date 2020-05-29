@@ -1,0 +1,64 @@
+import commonjs from "rollup-plugin-commonjs";
+import babel from "rollup-plugin-babel";
+import postcss from "rollup-plugin-postcss";
+import ascii from "rollup-plugin-ascii";
+import resolve from "@rollup/plugin-node-resolve";
+import includePaths from "rollup-plugin-includepaths";
+import { uglify } from "rollup-plugin-uglify";
+
+const externalAry = [
+  "antd",
+  "antd/es/locale/zh_CN",
+  "antd/dist/antd.css",
+  "moment",
+  "moment/locale/zh-cn",
+  "echarts",
+  "prop-types",
+  "snowflake-id",
+  "win-trade-base",
+  "win-trade-base/static/css/main.css",
+  "@lugia/lugiax",
+  "@ant-design/icons",
+  "react",
+  "react-transition-group",
+  "react-dnd",
+  "react-dnd-html5-backend",
+  "react-loadable",
+  "react-resizable",
+];
+
+export default {
+  input: "yss-biz-base/index.js",
+  output: {
+    file: "dist/index.js",
+    format: "esm",
+    sourcemap: true,
+  },
+  plugins: [
+    resolve(),
+    includePaths({
+      include: { "yss-biz": "./yss-biz-base/index.js" },
+    }),
+    babel({ exclude: "**/node_modules/**", runtimeHelpers: true }),
+    commonjs(),
+    ascii(),
+    postcss({
+      // Extract CSS to the same location where JS file is generated but with .css extension.
+      extract: true,
+      // Use named exports alongside default export.
+      namedExports: true,
+      // Minimize CSS, boolean or options for cssnano.
+      // minimize: true,
+      // Enable sourceMap.
+      // sourceMap: true,
+      // This plugin will process files ending with these extensions and the extensions supported by custom loaders.
+      extensions: [".less", ".css"],
+    }),
+    // uglify({}),
+  ],
+  // external: (id) => {
+  //   return externalAry.find((str) => new RegExp(str, "g").test(id));
+  // },
+  //不能使用正则匹配，有个定制化组件也是以echarts命名
+  external: externalAry,
+};

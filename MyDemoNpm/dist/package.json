@@ -1,0 +1,15 @@
+{
+  "name": "yss-biz-base-backup",
+  "version": "1.0.6-beta",
+  "description": "项目公共包",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "create-page": "create-page"
+  },
+  "bin": {
+    "create-page": "./create-page.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
