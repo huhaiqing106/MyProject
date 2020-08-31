@@ -6,45 +6,36 @@
  * @ update: 2019/12/11
  */
 
-import React, { PureComponent } from 'react';
-import { connect } from '@lugia/lugiax';
+import React, { Component } from "react";
+import { connect } from "@lugia/lugiax";
+import { fromJS, is } from "immutable";
 
-export default (Components, file, bindProps = []) => {
-  class RoleControl extends PureComponent {
+export default (Components, file) => {
+  class RoleControl extends Component {
+    
+    shouldComponentUpdate(nextProps, nextState) {
+      const propsMap = fromJS(this.props);
+      const nextPropsMap = fromJS(nextProps);
+      return !is(propsMap, nextPropsMap);
+    }
+
     render() {
-      let props = this.props || {};
-      bindProps.map(item => {
-        return (props[item] = this.props[item]);
+      let queryArray = location.hash?.split("?")[1]?.split("&") || [];
+      queryArray.forEach((item) => {
+        let queryItem = item.split("=");
+        localStorage.setItem(queryItem[0], queryItem[1]);
       });
+      let props = this.props || {};
       return <Components {...props} />;
     }
   }
+
   return connect(
     require(`../../src/page/${file}/models`).default,
-    state => {
+    (state) => {
       let statejs = state.toJS();
-      return Object.keys(statejs).reduce((pre, cur) => {
-        if (bindProps && bindProps.length) {
-          if (bindProps.includes(cur)) {
-            pre[cur] = statejs[cur];
-          }
-        } else {
-          pre[cur] = statejs[cur];
-        }
-        return pre;
-      }, {});
+      return statejs;
     },
-    mutations => {
-      return Object.keys(mutations).reduce((pre, cur) => {
-        if (bindProps && bindProps.length) {
-          if (bindProps.includes(cur)) {
-            pre[cur] = mutations[cur];
-          }
-        } else {
-          pre[cur] = mutations[cur];
-        }
-        return pre;
-      }, {});
-    }
-  )(RoleControl)
-}
+    (mutations) => mutations
+  )(RoleControl);
+};

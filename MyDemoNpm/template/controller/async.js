@@ -1,11 +1,11 @@
-import { publicAsync } from 'yss-biz'
-import { axiosPageList } from '../services'
-/*
-  _httpPageList // 初始化表格和模糊查询
-*/
-const { _httpPageList } = publicAsync
+import { publicAsync } from 'yss-trade-base'
+
+/**
+ * 公共方法 publicAsync
+ * 
+ * @description _httpPageList 分页查询方法
+ */
+
 export default {
-  async httpPageList(state, {}, obj) {
-    return _httpPageList(state, { request: axiosPageList }, obj)
-  }
+ ...publicAsync
 }

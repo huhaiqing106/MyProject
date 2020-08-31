@@ -42,7 +42,7 @@ export default class AppComponent extends React.Component {
 
 
     isDev = () => {
-        return "development" === process.env.NODE_ENV;
+       return "development" === process.env.NODE_ENV;
     };
 
     render() {
@@ -51,7 +51,8 @@ export default class AppComponent extends React.Component {
             appModel: this.state.baseConfig.appModel || appModel,
             isDev: this.isDev(),
             isSingle: !this.props.isIframe ? this.isDev() : false,
-            productName:this.props.productName
+            productName:this.props.productName,
+            ...this.props
         };
         antdConfig.locale = zhCN // 此处待
         const { ChildRoutes = [] } = this.props

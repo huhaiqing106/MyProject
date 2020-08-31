@@ -4,6 +4,7 @@
  */
 import { message } from 'antd';
 
+/**错误码 */
 const requestErrMes = {
     0: '您的网络发生异常，无法连接服务器!',
     400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
@@ -17,16 +18,16 @@ const requestErrMes = {
 
 const notTokenMes = '您还没有登录'
 
-// 服务端错误处理函数
+/**服务端错误处理函数 */
 const commonErr = msg => message.error(msg)
 
-// 请求错误处理函数
+/**请求错误处理函数 */
 const requestErr = {}
 Object.keys(requestErrMes).forEach(key => {
     requestErr[key] = () => message.error(requestErrMes[key])
 })
 
-
+/**无token */
 const notToken = flag => {
     message.error(notTokenMes)
     return flag

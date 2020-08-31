@@ -14,15 +14,24 @@
   }
 
   tr.drop-over-downward td {
-    border-bottom: 1px dashed #ff900d;
+    // border-bottom: 1px dashed #ff900d;
   }
 
   tr.drop-over-upward td {
-    border-top: 1px dashed #ff900d;
+    // border-top: 1px dashed #ff900d;
   }
   th.drop-over-border {
-    outline: dashed 1px #ff900d;
+    // outline: dashed 1px #ff900d;
     outline-offset: -1px;
+  }
+  .ant-table.ant-table-bordered .ant-table-expanded-row-fixed::after{
+    border-right: 0;
+  }
+  .ant-table-header,
+  .ant-table-thead {
+    th div.ant-table-column-sorters {
+      padding: 3px 16px;
+    }
   }
 }
 .columnSelection {
@@ -31,9 +40,9 @@
   z-index: 999;
   top: -2px;
   overflow-x: hidden;
-  border: 1px solid #1771a3;
+  // border: 1px solid #1771a3;
   padding: 10px 6px;
-  background: #0b1431;
+  // background: #0b1431;
   width: 124px;
   ul {
     padding-bottom: 34px;
@@ -50,7 +59,7 @@
       top: 3px;
       cursor: pointer;
       &:hover {
-        color: #1771a3;
+        // color: #1771a3;
       }
     }
   }
@@ -61,8 +70,8 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    background: #0b1431;
-    border-top: 1px solid #1771a3;
+    // background: #0b1431;
+    // border-top: 1px solid #1771a3;
   }
 }
 .columnBotton {
@@ -75,12 +84,12 @@
       padding: 2px 5px;
     }
     >.butGroup-btn-line{
-      color:#1771a3
+      // color:#1771a3
     }
     >.butGroup-btn-item:not(.butGroup-btn-line){
       cursor: pointer;
       &:hover{
-        color:#07d3ff
+        // color:#07d3ff
       }
     }
   }

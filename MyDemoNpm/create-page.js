@@ -34,9 +34,6 @@ var copy = function (src, dst) {
                 let readable = fs.createReadStream(_src);//创建读取流
                 let writable = fs.createWriteStream(_dst);//创建写入流
                 readable.pipe(writable);
-                if ((/\/view\/index\.js/g).test(_src)) {
-                    writable = setPageIndex(writable)
-                }
             } else if (stats.isDirectory()) { //是目录则 递归 
                 checkDirectory(_src, _dst, copy);
             }
@@ -82,21 +79,6 @@ var prompt = function () {
         return checkDirectory(SOURCES_DIRECTORY, TARGET_SRC, copy);
     }
 }
-
-var setPageIndex = pageContent => {
-    const fs = require('fs');
-    fs.readFile(pageContent.path, 'utf8', function (err, data) {
-        if (err) throw err;
-        let newContent = data.replace(/\$createModelName/g, pageUrl)
-        fs.writeFile(pageContent.path, newContent, 'utf8', (err) => {
-            if (err) throw err;
-        });
-    });
-
-    return pageContent
-}
-
-
 
 // doing
 create()

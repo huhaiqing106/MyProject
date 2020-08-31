@@ -1,18 +1,18 @@
 {
-  "name": "yss-biz-base",
-  "version": "1.0.0-beta10",
+  "name": "yss-trade-base",
+  "version": "1.0.0",
   "description": "项目公共包",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c",
-    "yss-biz": "copy-yss-biz",
+    "build": "rollup -c && node copy-template-file",
+    "copy-template-file": "copy-template-file",
     "create-page": "create-page"
   },
   "bin": {
-    "copy-yss-biz": "./copy-yss-biz.js",
-    "create-page": "./create-page.js"
+    "create-page": "./create-page.js",
+    "copy-template-file": "./copy-template-file.js"
   },
-  "author": "mihujun",
+  "author": "yss",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.10.0",
@@ -25,6 +25,7 @@
     "@babel/preset-react": "^7.10.0",
     "@babel/runtime": "7.1.2",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "immutable": "^4.0.0-rc.12",
     "rollup": "^2.10.9",
     "rollup-plugin-ascii": "^0.0.3",
     "rollup-plugin-babel": "^4.4.0",
@@ -32,6 +33,10 @@
     "rollup-plugin-includepaths": "^0.2.3",
     "rollup-plugin-less": "^1.1.2",
     "rollup-plugin-postcss": "^3.1.1",
-    "rollup-plugin-uglify": "^6.0.4"
+    "rollup-plugin-terser": "^6.1.0"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "inquirer": "^7.1.0"
   }
 }

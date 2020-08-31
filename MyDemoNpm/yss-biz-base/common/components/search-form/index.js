@@ -2,116 +2,74 @@
 /**
  * @lzx
  * 自带样式的查询表单组件（可设置两种不同的展开方式 具体使用可参考文档）
- *  - mapOption 遍历 数据转换成 options 的方法 
+ *  - mapOption 遍历 数据转换成 options 的方法
  */
-import React, { PureComponent, Fragment } from 'react';
-import {
-  Button,
-  Drawer,
-  Form,
-  Input,
-  InputNumber,
-  Icon,
-  TreeSelect,
-  DatePicker,
-  TimePicker,
-  Cascader,
-  Radio,
-  Checkbox,
-  Switch,
-  Slider,
-} from 'antd';
-
-import Select from '../select-normal'
-import SelectMapDics from '../select-map-dics'
-import InputPart from '../input-part'
-import InputRange from '../input-range'
-import SelectRequest from '../select-request'
-import TreeSelectRequest from '../tree-select-request'
-import CheckboxGroup from '../checkbox-group'
-import RadioGroup from '../radio-group'
+import { Button, Drawer, Form } from 'antd';
+import React, { Fragment, PureComponent } from 'react';
 import { isFunc } from 'yss-biz';
+import { FormValidItem } from 'win-trade-base';
+import itemList from '../registry';
 
-const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
-const itemList = {
-  Input,
-  InputNumber,
-  InputPart,
-  InputRange,
-  Select,
-  SelectMapDics,
-  SelectRequest,
-  TreeSelectRequest,
-  TreeSelect,
-  DatePicker,
-  MonthPicker,
-  RangePicker,
-  WeekPicker,
-  TimePicker,
-  Cascader,
-  Radio,
-  Checkbox,
-  RadioGroup,
-  CheckboxGroup,
-  Switch,
-  Slider,
-}
 class SearchForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       showToggle: this.props.formItem && this.props.formItem.length > (this.props.lineOf || 4) ? true : false,
-      toggle: false
+      toggle: false,
     };
     this.props.refs && this.props.refs(this);
     this.onSearch = this.onSearch.bind(this);
     this.onReset = this.onReset.bind(this);
-    this.formRef = React.createRef()
-    // moment.locale('zh-cn');
+    // this.formRef = React.createRef() 4.x;
+    this.formObject = this.props.form;
   }
 
   changeToggle = () => {
     this.setState({
-      toggle: !this.state.toggle
+      toggle: !this.state.toggle,
     });
   };
 
-  getValues = itemName => {
-    const { getFieldsValue } = this.formRef.current;
+  getValues = (itemName) => {
+    const { getFieldsValue } = this.formObject;
     if (typeof getFieldsValue === 'function') {
       return getFieldsValue(itemName);
     }
-    return {}
-  }
+    return {};
+  };
 
   onSearch(more) {
-    let values
-    values = this.getValues()
-    more === 'more' && Object.keys(values).forEach((key, index) => {
-      if (index < this.props.lineOf || 4) { 
-        delete values[key]
-       } else {
-        return false
+    const { validateFields } = this.formObject;
+    validateFields((errors, values) => {
+      if (!errors) {
+        values = this.getValues();
+        more === 'more' &&
+          Object.keys(values).forEach((key, index) => {
+            if (!this.props.moreBtnGetAll && (index < this.props.lineOf || 4)) {
+              delete values[key];
+            } else {
+              return false;
+            }
+          });
+        isFunc(this.props.handleSearch) && this.props.handleSearch(values);
       }
     });
-    isFunc(this.props.handleSearch) && this.props.handleSearch(values)
-  };
+  }
 
   onReset() {
-    const { resetFields } = this.formRef.current;
-    let theBreak = true
-    isFunc(this.props.handleBeforeReset) && (theBreak = this.props.handleBeforeReset())
-    if (theBreak === false) return false
+    const { resetFields } = this.formObject;
+    let theBreak = true;
+    isFunc(this.props.handleBeforeReset) && (theBreak = this.props.handleBeforeReset());
+    if (theBreak === false) return false;
     typeof resetFields === 'function' && resetFields();
-  };
+  }
 
   render() {
-    // const { getFieldDecorator } = this.props.form;
     const { toggle, showToggle } = this.state;
-    let btnSize = this.props.btnSize || this.props.size
+    let btnSize = this.props.btnSize || this.props.size;
     this.firstData = [];
     this.otherData = [];
-    if (this.props.formItem && this.props.formItem.length > this.props.lineOf || 4) {
+    if ((this.props.formItem && this.props.formItem.length > this.props.lineOf) || 4) {
       this.allData = this.props.formItem;
       this.firstData = this.allData.slice(0, this.props.lineOf || 4);
       this.otherData = this.allData.slice(this.props.lineOf || 4, this.allData.length);
@@ -120,111 +78,78 @@ class SearchForm extends PureComponent {
     }
     return (
       <Fragment>
-        <Form ref={this.formRef} autoComplete="off" className="searchForm rowStyle" {...this.props.formProps}>
-          <section className='f-clearfix'>
-            <div className='f-left'>
-              {
-                this.firstData.map((item, index) => {
-                  let unitSize = (item.props || {}).size || this.props.size
-                  let itemSize = item.itemSize || this.props.itemSize || '200px'
-                  let labelSize = item.labelSize || this.props.labelSize || '4em'
-                  let marginRight = item.marginRight || this.props.marginRight || '30px'
-                  if (item.type === 'Select' && !!item.props.getDics && !isNaN(item.props.getDics)) {
-                    item.type = 'SelectMapDics'
-                    item.props.code = item.props.getDics
-                  }
-                  if (item.type === 'Select' && !!item.props.config) {
-                    item.type = 'SelectRequest'
-                  }
-                  if (item.type === 'TreeSelect' && !!item.props.config) {
-                    item.type = 'TreeSelectRequest'
-                  }
-                  switch (item.type) {
-                    case 'TreeSelec':
-                    case 'Select':
-                    case 'SelectMapDics':
-                    case 'SelectRequest':
-                    case 'TreeSelectRequest':
-                      item.props.showSearch = true
-                      break;
-                    default:
-                      break;
-                  }
-                  let ItemType = itemList[item.type]
-                  let newProps = { ...item.props }
-                  const rulesList = item.rules
-                  const initialValue = (item.props || {}).initialValue
-                  delete (item.props || {}).initialValue
-                  return (
-                    <div key={item.name} className='f-left' style={{ width: `calc(${itemSize} + ${labelSize})`, marginRight }}>
-                      <ul className='f-clearfix'>
-                        {item.label && (
-                          <li className='f-left f-mr10 f-text-right' style={{ width: labelSize, marginTop: unitSize !== 'small' ? '5px' : '' }}>
-                            <span className={(!!rulesList && rulesList[0] || {}).required ? 'ant-form-item-required' : ''} >{item.label}</span>
-                          </li>
-                        )}
-                        <li className='f-block-hide'>
-                          {
-                            item.type !== 'InputRange' ? (
-                              <Form.Item wrapperCol={{ span: 24 }} style={{ marginBottom: item.itemMargin }} name={item.name} rules={item.rules} initialValue={initialValue}>
-                                <ItemType {...item.props} size={unitSize} options={item.options} />
-                              </Form.Item>
-                            ) : <ItemType {...item} size={unitSize} />
-                          }
-                        </li>
-                      </ul>
-                    </div>
-                  );
-                })
-              }
-            </div>
-            <div className="searchBox f-left">
-              <ul className='f-flex-center' style={{ marginTop: btnSize === 'small' ? '3px' : '' }}>
-                {showToggle &&
-                  (<li
-                    onClick={() => {
-                      this.changeToggle();
-                      (this.props.hasMorModal && !this.props.keepValues) && this.onReset()
-                      isFunc(this.props.changeToggleAfter) && this.props.changeToggleAfter(!toggle)
+        <Form /* ref={this.formRef} 4.x*/ autoComplete="off" className="searchForm rowStyle" {...this.props.formProps}>
+          <section className="f-clearfix">
+            <div className="f-left">
+              {this.firstData.map((item, index) => {
+                let itemSize = item.itemSize || this.props.itemSize || '200px';
+                let labelSize = item.labelSize || this.props.labelSize || '4em';
+                let marginRight = item.marginRight || this.props.marginRight || '30px';
+
+                return (
+                  <div
+                    key={item.name}
+                    className="f-left"
+                    style={{
+                      width: `calc(${itemSize} + ${labelSize})`,
+                      marginRight,
                     }}
                   >
-                    <div className='inputSearch'>
-                      <span>更多查询</span>
+                    {this.createElement(item)}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="searchBox f-left">
+              <ul className="f-flex-center" style={{ marginTop: btnSize === 'small' ? '3px' : '' }}>
+                {showToggle && (
+                  <li
+                    onClick={() => {
+                      this.changeToggle();
+                      this.props.hasMorModal && !this.props.keepValues && this.onReset();
+                      isFunc(this.props.changeToggleAfter) && this.props.changeToggleAfter(!toggle);
+                    }}
+                  >
+                    <div className="inputSearch">
+                      <span style={{ "marginRight": "14px" }}>更多查询</span>
                       {/* {!this.props.moreTypeModal && <Icon style={{ verticalAlign: '-2px' }} type={toggle ? 'caret-up' : 'caret-down'} className="getMoreIcon" />} */}
                     </div>
-
                   </li>
-                  )}
-                <li className='f-mr10'>
-                  <Button size={btnSize} type="primary" onClick={async () => {
-                    const { validateFields } = this.formRef.current;
-                    await validateFields()
-                      .then(values => {
-                        this.onSearch()
-                      })
-                      .catch(errors => {
-                      })
-                  }}>查询</Button>
+                )}
+                <li className="f-mr10">
+                  <Button
+                    size={btnSize}
+                    type="primary"
+                    onClick={() => {
+                      this.onSearch();
+                    }}
+                    style={{ "marginTop": "4px" }}
+                  >
+                    查询
+                  </Button>
                 </li>
                 <li>
-                  <Button size={btnSize} onClick={this.onReset}>重置</Button>
+                  <Button size={btnSize} onClick={this.onReset} style={{ "marginTop": "4px" }}>
+                    重置
+                  </Button>
                 </li>
               </ul>
             </div>
           </section>
           {!this.props.moreTypeModal ? (
-            <section className='f-clearfix' style={{ display: toggle ? 'block' : 'none' }}>
+            <section className="f-clearfix" style={{ display: toggle ? 'block' : 'none' }}>
               {this.nomalMoreForm()}
             </section>
           ) : (
               <Drawer
-                className='darkStyle'
+                className="darkStyle"
                 title="更多查询"
                 placement="right"
                 closable={false}
+                forceRender={true}
                 onClose={this.changeToggle}
                 visible={toggle}
-                width={400}
+                width={this.props?.modalWidth || 400}
               >
                 {this.modelMoreForm()}
               </Drawer>
@@ -235,149 +160,132 @@ class SearchForm extends PureComponent {
   }
 
   nomalMoreForm() {
-    return (
-      this.otherData.map((item, index) => {
-        let nextLine = index % (!!this.props.lineOf ? this.props.lineOf : 4) === 0
-        let unitSize = (item.props || {}).size || this.props.size
-        let itemSize = item.itemSize || this.props.itemSize || '200px'
-        let labelSize = item.labelSize || this.props.labelSize || '4em'
-        if (item.type === 'Select' && !!item.props.getDics && !isNaN(item.props.getDics)) {
-          item.type = 'SelectMapDics'
-          item.props.code = item.props.getDics
-        }
-        if (item.type === 'Select' && !!item.props.config) {
-          item.type = 'SelectRequest'
-        }
-        if (item.type === 'TreeSelect' && !!item.props.config) {
-          item.type = 'TreeSelectRequest'
-        }
-        switch (item.type) {
-          case 'TreeSelec':
-          case 'Select':
-          case 'SelectMapDics':
-          case 'SelectRequest':
-          case 'TreeSelectRequest':
-            item.props.showSearch = true
-            break;
-          default:
-            break;
-        }
-        let ItemType = itemList[item.type]
-        let newProps = { ...item.props }
-        const rulesList = item.rules
-        const initialValue = (item.props || {}).initialValue
-        delete (item.props || {}).initialValue
-        return (
-          <div key={item.name} className='f-left f-mr30' style={{ width: `calc(${labelSize} + ${itemSize})`, clear: nextLine ? 'both' : 'none' }}>
-            <ul className='f-clearfix'>
-              {item.label && (
-                <li className='f-left f-mr10 f-text-right' style={{ width: labelSize, marginTop: unitSize !== 'small' ? '5px' : '' }}>
-                  <span className={(!!rulesList && rulesList[0] || {}).required ? 'ant-form-item-required' : ''} >{item.label}</span>
-                </li>
-              )}
-              <li className='f-block-hide'>
-                {
-                  item.type !== 'InputRange' ? (
-                    <Form.Item wrapperCol={{ span: 24 }} style={{ marginBottom: item.itemMargin }} name={item.name} rules={item.rules} initialValue={initialValue}>
-                      <ItemType {...item.props} size={unitSize} options={item.options} />
-                    </Form.Item>
-                  ) : <ItemType {...item} size={unitSize} />
-                }
-              </li>
-            </ul>
+    return this.otherData.map((item, index) => {
+      let nextLine = index % (!!this.props.lineOf ? this.props.lineOf : 4) === 0;
+      let labelSize = item.labelSize || this.props.labelSize || '4em';
+      let itemSize = item.itemSize || this.props.itemSize || '200px';
 
-          </div>
-        );
-      })
-    )
+      return (
+        <div
+          key={item.name}
+          className="f-left f-mr30"
+          style={{
+            width: `calc(${labelSize} + ${itemSize})`,
+            clear: nextLine ? 'both' : 'none',
+          }}
+        >
+          {this.createElement(item)}
+        </div>
+      );
+    });
   }
   modelMoreForm() {
-    let btnSize = this.props.btnSize || this.props.size
+    let btnSize = this.props.btnSize || this.props.size;
     return (
-      <Form layout="horizontal" className='rowStyle' {...this.props.formProps}>
-        <section className='f-clearfix'>
-          {this.otherData.map((item, index) => {
-            let unitSize = (item.props || {}).size || this.props.size
-            let labelSize = item.labelSize || this.props.labelSize || '4em'
-            if (item.type === 'Select' && !!item.props.getDics && !isNaN(item.props.getDics)) {
-              item.type = 'SelectMapDics'
-              item.props.code = item.props.getDics
-            }
-            if (item.type === 'Select' && !!item.props.config) {
-              item.type = 'SelectRequest'
-            }
-            if (item.type === 'TreeSelect' && !!item.props.config) {
-              item.type = 'TreeSelectRequest'
-            }
-            switch (item.type) {
-              case 'TreeSelec':
-              case 'Select':
-              case 'SelectMapDics':
-              case 'SelectRequest':
-              case 'TreeSelectRequest':
-                item.props.showSearch = true
-                break;
-              default:
-                break;
-            }
-            let ItemType = itemList[item.type]
-            let newProps = { ...item.props }
-            const rulesList = item.rules
-            const initialValue = (item.props || {}).initialValue
-            delete (item.props || {}).initialValue
-            return (
-              <div key={item.name}>
-                <ul className='f-clearfix'>
-                  {item.label && (
-                    <li className='f-left f-mr10 f-text-right' style={{ width: labelSize, marginTop: unitSize !== 'small' ? '5px' : '' }}>
-                      <span className={(!!rulesList && rulesList[0] || {}).required ? 'ant-form-item-required' : ''} >{item.label}</span>
-                    </li>
-                  )}
-                  <li className='f-block-hide'>
-                    {
-                      item.type !== 'InputRange' ? (
-                        <Form.Item wrapperCol={{ span: 24 }} style={{ marginBottom: item.itemMargin }} name={item.name} rules={item.rules} initialValue={initialValue}>
-                          <ItemType {...item.props} size={unitSize} options={item.options} />
-                        </Form.Item>
-                      ) : <ItemType {...item} size={unitSize} />
-                    }
-                  </li>
-                </ul>
-              </div>
-            );
-          })}
-          <div className="searchBox">
-            <ul className='f-flex-center f-mt10'>
-              <li className='f-mr10'>
-                <Button type='primary' size={btnSize} onClick={async () => {
-                  const { validateFields } = this.formRef.current;
-                  await validateFields()
-                    .then(values => {
-                      this.onSearch('more')
-                    })
-                    .catch(errors => {
-                    })
-                }}>
-                  查询
+      <section className="f-clearfix">
+        {this.otherData.map((item, index) => {
+          return <div key={item.name}>{this.createElement(item)}</div>;
+        })}
+        <div className="searchBox">
+          <ul className="f-flex-center f-mt10">
+            <li className="f-mr10">
+              <Button
+                type="primary"
+                size={btnSize}
+                onClick={() => {
+                  this.onSearch('more');
+                }}
+              >
+                查询
               </Button>
-              </li>
-              <li>
-                <Button size={btnSize} onClick={this.onReset}>重置</Button>
-              </li>
-            </ul>
-          </div>
-        </section>
-      </Form>
-    )
+            </li>
+            <li>
+              <Button size={btnSize} onClick={this.onReset}>
+                重置
+              </Button>
+            </li>
+          </ul>
+        </div>
+      </section>
+    );
+  }
+
+  createElement(item) {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+
+    let unitSize = (item.props || {}).size || this.props.size;
+    let labelSize = item.labelSize || this.props.labelSize || '4em';
+    if (item.type === 'Select' && !!item.props.getDics) {
+      item.type = 'SelectMapDics';
+      item.props.code = item.props.getDics;
+    }
+    if (item.type === 'Select' && !!item.props.config) {
+      item.type = 'SelectRequest';
+    }
+    if (item.type === 'TreeSelect' && !!item.props.config) {
+      item.type = 'TreeSelectRequest';
+    }
+    switch (item.type) {
+      case 'TreeSelec':
+      case 'Select':
+      case 'SelectMapDics':
+      case 'SelectRequest':
+      case 'TreeSelectRequest':
+        item.props.showSearch = true;
+        break;
+      default:
+        break;
+    }
+    let ItemType = itemList[item.type];
+    const rulesList = item.rules;
+    const initialValue = (item.props || {}).initialValue;
+    delete (item.props || {}).initialValue;
+    return (
+      <ul className="f-clearfix">
+        {item.label && (
+          <li
+            className="f-left f-mr10 f-text-right"
+            style={{
+              width: labelSize,
+              marginTop: unitSize !== 'small' ? '5px' : '',
+            }}
+          >
+            <span className={((!!rulesList && rulesList[0]) || {}).required ? 'ant-form-item-required' : ''} style={{ "display": "inline-block", "verticalAlign": "middle" }}>{item.label}</span>
+          </li>
+        )}
+        <li className="f-block-hide">
+          {item.type !== 'InputRange' ? (
+            <FormValidItem wrapperCol={{ span: 24 }} style={{ marginBottom: item.itemMargin }}>
+              {/* 4.x <Form.Item
+                wrapperCol={{ span: 24 }}
+                style={{ marginBottom: item.itemMargin }}
+                name={item.name}
+                rules={item.rules}
+                initialValue={initialValue}
+              > */}
+              {getFieldDecorator(item.name, { rules: item.rules, initialValue: initialValue })(
+                <ItemType {...item.props} size={unitSize} options={item.options} />
+              )}
+              {/* </Form.Item> */}
+            </FormValidItem>
+          ) : (
+              <ItemType {...item} size={unitSize} />
+            )}
+        </li>
+      </ul>
+    );
   }
 }
 
 SearchForm.mapOption = (list, name, value) => {
-  return (list || []).map((item, index) => {
+  return (list || []).map((item) => {
     return {
       label: item[name],
       value: item[value],
-    }
-  })
-}
-export default SearchForm;
+      dataSource: item,
+    };
+  });
+};
+export default Form.create()(SearchForm);

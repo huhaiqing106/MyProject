@@ -88,11 +88,21 @@ class Trees extends Component {
   };
 
   searchValueChange = value => {
+    // 清空条件回到初始效果
+    if(!value.trim()) {
+      this.setState({
+        expandedKeys: [],
+        searchValue: "",
+        autoExpandParent: false
+      });
+      return
+    };
+
     const { treeData } = this.props;
     let dataList = getAllNodes(treeData);
     const expandedKeys = dataList
       .map(item => {
-        if (item.title && item.title.indexOf(value) > -1) {
+        if (this.toCompare(item.title, value) > -1) {
           return getParentKey(item.key, treeData);
         }
         return null;
@@ -105,9 +115,19 @@ class Trees extends Component {
     });
   };
 
+  toCompare = (val1, val2) => {
+    if (val1 && val2) {
+      val1 = val1.toLocaleLowerCase();
+      val2 = val2.toLocaleLowerCase();
+      return val1.indexOf(val2);
+    }
+    return -1;
+  }
+
   /**点击左侧树菜单文字展开子节点 */
   clickTree = event => {
-    let iconRemark = event.currentTarget.previousSibling;
+    // 找到当前节点的父节点下的第一个字节点，模拟点击触发展开
+    let iconRemark = event.currentTarget.parentNode.firstChild;
     let classes = iconRemark.getAttribute("class");
     if (
       classes.indexOf("ant-tree-switcher_close") > -1 ||
@@ -128,11 +148,8 @@ class Trees extends Component {
     const { treeData } = this.props;
     if (selectedKeys && selectedKeys.length) {
       let dataList = getAllNodes(treeData);
-      let selectNode = dataList.filter(item => item.key === selectedKeys[0]);
-      if (
-        this.props.treeSelect &&
-        typeof this.props.treeSelect === "function"
-      ) {
+      let selectNode = dataList.filter((item) => item.key === selectedKeys[0]);
+      if (this.props.treeSelect && typeof this.props.treeSelect === 'function') {
         this.props.treeSelect(selectNode[0]);
       }
     }
@@ -140,22 +157,27 @@ class Trees extends Component {
 
   render() {
     const { searchValue, autoExpandParent, expandedKeys } = this.state;
-    const { treeData, selectedKeys, searchPlaceholder} = this.props;
+    // style只能作用域div层
+    const { treeData, selectedKeys, searchPlaceholder, style, ...otherProps} = this.props;
     const mapTree = data =>
       data.map(item => {
-        const index = item.title.indexOf(searchValue);
-        const beforeStr = item.title.substr(0, index);
-        const afterStr = item.title.substr(index + searchValue.length);
-        const title =
-          index > -1 ? (
+        let title = (
+          <span>{item.title}</span>
+        );
+        // 如果是空字符indexOf会是0
+        const index = this.toCompare(item.title, searchValue);
+        if(index > -1){
+          const beforeStr = item.title.substr(0, index);
+          const middleStr = item.title.substr(index, searchValue.length);
+          const afterStr = item.title.substr(index + searchValue.length);
+          title = (
             <span>
               {beforeStr}
-              <span style={{ color: "#f50" }}>{searchValue}</span>
+              <span style={{ color: "#f50" }}>{middleStr}</span>
               {afterStr}
             </span>
-          ) : (
-            <span>{item.title}</span>
           );
+        }
         if (item.children && item.children.length) {
           return (
             <TreeNode key={item.key} title={title}>
@@ -166,17 +188,17 @@ class Trees extends Component {
         return <TreeNode key={item.key} title={title} />;
       });
     return (
-      <div style={{ height: "100%", overflowY: "auto", padding: "5px" }}>
+      <div className="custom-tree-area" style={{ height: "100%", overflowY: "auto", padding: "8px 5px", ...style }}>
         <Row>
           <Search
             placeholder={searchPlaceholder || "请输入查询"}
-            size="small"
             allowClear
             onChange={e => this.searchValueChange(e.target.value)}
             className="searchIcon"
           />
         </Row>
         <Tree
+          {...otherProps}
           autoExpandParent={autoExpandParent}
           expandedKeys={expandedKeys}
           selectedKeys={selectedKeys}
@@ -184,6 +206,7 @@ class Trees extends Component {
           onExpand={this.onExpand}
           treeData={treeData}
           onClick={this.clickTree}
+          className="custom-tree"
         >
           {mapTree(treeData)}
         </Tree>

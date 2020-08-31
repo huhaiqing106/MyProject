@@ -29,63 +29,17 @@ class ConfigableTable extends React.Component {
       <DndProvider backend={HTML5Backend}>
         {/**索引列*** */}
         <div style={{ "position": "relative", height: this.props.height }}  >
-          {
-            this.state.isIndexColunmShow && (
-              <div className="columnSelection" style={{ "left": this.state.clientX, top: this.state.clientY }}>
-                <ul>
-                  <span className="close" onClick={() => {
-                    this.setState({
-                      isShowBottom: false,
-                      isIndexColunmShow: false,
-                      clientX: 0,
-                      clientY: 0
-                    })
-                  }}>
-                    ✖
-            </span>
-                  {
-                    this.state.indexColumns.map((item) => {
-                      return (
-                        <li key={item.title}>
-                          <Checkbox
-                            checked={item.checked}
-                            disabled={(item.title == "序号" || item.title == "操作") ? true : false}
-                            onChange={(checkedValue) => { this.checkBoxCol(checkedValue, item) }}></Checkbox>
-                          <span className="checkboxName">{item.title}
-                          </span>
-                        </li>)
-                    })
-                  }
-                </ul>
-                <div className="butGroup">
-                  <Button size="small" style={{ "min-width": "50px", margin: '0 5px 0 2px' }} type="primary" onClick={this.submit}>确定</Button> <Button style={{ "min-width": "50px" }} size="small" onClick={this.resetColumn}>重置</Button>
-                </div>
-              </div>)
 
-          }
-          <div className="columnBotton" ref={(colunmSpan) => this.colunmSpan = colunmSpan}>
-            {this.state.isShowBottom && !this.state.isIndexColunmShow &&
-              (<ul className='f-clearfix butGroup-btn-list'>
-                <li className='f-left butGroup-btn-item' onClick={(e) => { this.setIndexColumnShow(e) }}>自定义常用列</li>
-                {/* <li className='f-left butGroup-btn-item butGroup-btn-line'>|</li>
-                  <li className='f-left butGroup-btn-item'>框选单元格</li>
-                  <li className='f-left butGroup-btn-item butGroup-btn-line'>|</li> */}
-                <li className='f-left butGroup-btn-item' onClick={() => {
-                  this.setState({
-                    isShowBottom: false
-                  })
-                }}>✖</li>
-              </ul>)
-            }
-            {
-              this.props.isSelectColumn && !this.state.isIndexColunmShow && !this.state.isShowBottom && <span onClick={this.setShowBottom} type="primary" style={{ fontSize: "12px", padding: "0 6.6px", cursor: "pointer" }}><span className='f-relative' style={{ top: '-2px' }}>···</span></span>
-            }
-          </div>
           {/**索引列*** */}
           <div className="yss-configable-table tableInfo">
             <CommonTable
               {...this.props}
-              rowKey={record => record.id || this.props.rowKey}
+              rowKey={record => {
+                if (typeof this.props.rowKey === "function") {
+                  return (this.props.rowKey && this.props.rowKey(record))
+                }
+                return record[this.props.rowKey] || record.id
+              }}
               columns={this.state.tableColumns}
             />
           </div>
@@ -98,8 +52,8 @@ class ConfigableTable extends React.Component {
     const {
       columns,
     } = nextProps;
-    if (this.props.columns.length === columns.length) return false
-    let formatColumns = columns.map(item => {
+    if (this.props?.columns?.length === columns?.length) return false
+    let formatColumns = columns?.map(item => {
       return {
         ...item,
         checked: true
@@ -172,7 +126,6 @@ class ConfigableTable extends React.Component {
         tableColumnsState = indexColumnsState.filter(item => item.checked);
       }
       this.setState(() => {
-        console.log()
         return {
           tableColumns: tableColumnsState
         }

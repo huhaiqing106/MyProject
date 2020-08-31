@@ -11,16 +11,19 @@ class TransfromDown extends PureComponent {
     isSHow: true
   };
   render() {
-    const { children } = this.props;
+    const { children,unfold=false } = this.props;
+    const className = unfold?"fade-layout-unfold":"fade-layout";
+    const show = unfold?this.state.isSHow:!this.state.isSHow;
+    const iconType = unfold?(!this.state.isSHow ? 'caret-up' : 'caret-down'):(this.state.isSHow ? 'caret-up' : 'caret-down')
     return (
       <Fragment>
         {children[0]}
-        <CSSTransition in={!this.state.isSHow} timeout={300} classNames="fade">
-          <div className='fade-layout' style={{ position: this.props.position }}>
+        <CSSTransition in={show} timeout={300} classNames="fade">
+          <div className={className} style={{ position: this.props.position }}>
             <div className='fade-button'>
               <span className='fade-button-inner' onClick={this.toggleMore}>
                 关联信息
-                {/* <Icon type={this.state.isSHow ? 'caret-up' : 'caret-down'} /> */}
+                <Icon type={iconType} />
               </span>
             </div>
             {children[1]}

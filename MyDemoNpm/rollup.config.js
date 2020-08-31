@@ -4,7 +4,7 @@ import postcss from "rollup-plugin-postcss";
 import ascii from "rollup-plugin-ascii";
 import resolve from "@rollup/plugin-node-resolve";
 import includePaths from "rollup-plugin-includepaths";
-import { uglify } from "rollup-plugin-uglify";
+import { terser } from "rollup-plugin-terser";
 
 const externalAry = [
   "antd",
@@ -16,15 +16,17 @@ const externalAry = [
   "prop-types",
   "snowflake-id",
   "win-trade-base",
-  "win-trade-base/static/css/main.css",
   "@lugia/lugiax",
   "@ant-design/icons",
   "react",
+  "immutable",
   "react-transition-group",
   "react-dnd",
   "react-dnd-html5-backend",
   "react-loadable",
   "react-resizable",
+  "braft-editor",
+  "react-pdf-js"
 ];
 
 export default {
@@ -48,17 +50,14 @@ export default {
       // Use named exports alongside default export.
       namedExports: true,
       // Minimize CSS, boolean or options for cssnano.
-      // minimize: true,
+      minimize: true,
       // Enable sourceMap.
-      // sourceMap: true,
+      sourceMap: true,
       // This plugin will process files ending with these extensions and the extensions supported by custom loaders.
       extensions: [".less", ".css"],
     }),
-    // uglify({}),
+    // terser(),
   ],
-  // external: (id) => {
-  //   return externalAry.find((str) => new RegExp(str, "g").test(id));
-  // },
-  //不能使用正则匹配，有个定制化组件也是以echarts命名
+  //不能使用正则匹配，有定制化组件也是以echarts命名
   external: externalAry,
 };

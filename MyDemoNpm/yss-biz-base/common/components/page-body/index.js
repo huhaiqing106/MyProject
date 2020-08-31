@@ -5,7 +5,8 @@
  *  - PageMain 页面主体
  *  - Container 带内边距的容器
  */
-import React, { cloneElement } from 'react';
+import React, { PureComponent,Fragment ,cloneElement } from 'react';
+import {Icon} from "antd";
 const PageBody = props => (
     <div className={
         !!props.className ?
@@ -19,10 +20,9 @@ const PageBody = props => (
         {props.children}
     </div>
 )
-
 PageBody.PageSide = props => (
     <div
-        className={!!props.className ? props.className + ' side' : 'side'}
+        className={`${!!props.className ? props.className + ' side' : 'side'} ${props.keepBgColor ? 'keep-bg-color' : ''}`}
         style={{
             ...props.style,
             marginRight: props.noMargin ? 0 : '',
@@ -32,11 +32,46 @@ PageBody.PageSide = props => (
         {props.children}
     </div>
 )
+export class PageSide extends PureComponent {
+    state = {
+      isSHow: true,
+    };
+    render() {
+      const { children } = this.props;
+      const style=()=>{
+        return {
+          transition:"all .5s",
+          [this.props.type]:this.state.isSHow?this.props.length:"0px"
+        }
+      }
+      return (
+        <Fragment>
+        <div className={this.props.className + ' side'} style={style()}>
+            {this.state.isSHow?children:""}
+            <span className={this.props.type=="width"?"iconRight":"iconBottom"} onClick={()=>{   
+              this.setState(()=>{
+                return {
+                  isSHow:!this.state.isSHow
+                }
+              },()=>{
+              })
+                }}><Icon type={this.props.type=="width"?"caret-right":"caret-down"} /> </span>
+        </div>
+        </Fragment>
+      );
+    }
+    toggleMore = () => {
+      this.setState({
+        isSHow: !this.state.isSHow,
+      });
+    };
+  }
 PageBody.PageMain = props => (
     <div className={!!props.className ? props.className + " main" : 'main'}>
         <div style={{
+            ...props.style,
             height: props.height || '100%',
-            backgroundColor: props.noBgColor ? 'transparent' : !!props.bgColor ? props.bgColor : ''
+            backgroundColor: props.noBgColor ? 'transparent' : !!props.bgColor ? props.bgColor : '',
         }}>
             {props.children}
         </div>
