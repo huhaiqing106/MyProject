@@ -25,10 +25,11 @@ console.log(chalk.white("\n Start generating... \n"));
 const spinner = ora("Downloading...");
 spinner.start();
 
-const svnUrl = "http://192.168.20.8/svn/TS_Product/JavaPlatForm/jreap/08_工程模板及示例/02branches/0.2.S1/jreap-pro";
+const svnUrl = "http://192.168.20.8/svn/TS_Product/JavaPlatForm/jreap/08_工程模板及示例/02branches/0.2.S1/jreap-pro/";
 
-svnUltiMate.commands.checkout(svnUrl, proejectName, function (err) {
-  console.log(err);
+svnUltiMate.commands.checkout(svnUrl, proejectName, { username: "huhq", password: "Huhq#909152" }, function (err) {
+  console.log("1111", arguments[0]);
+  console.log("2222", arguments[1]);
 });
 
 spinner.succeed();
