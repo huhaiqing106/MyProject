@@ -1,14 +1,11 @@
 {
-  "name": "dtxy-cli",
+  "name": "hhq-cli",
   "version": "0.0.1",
   "description": "dtxy cli",
   "main": "index.js",
   "bin": {
     "dtxy": "bin/dtxy-cli.js"
   },
-  "keywords": [
-    "dtxy"
-  ],
   "author": "dtxy",
   "license": "ISC",
   "dependencies": {

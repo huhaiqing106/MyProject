@@ -8,7 +8,8 @@ const program = require("commander");
 program
   .version(require("../package.json").version)
   .usage("<command> [options]")
-  .command("add", "add a new template")
+  // 后期扩展支持根据配置的地址初始化模板
+  // .command("init-config", "generate a new project from a config template")
   .command("init", "generate a new project from a template");
 
 // 解析命令行参数
