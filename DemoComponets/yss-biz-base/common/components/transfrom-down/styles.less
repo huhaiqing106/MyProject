@@ -1,0 +1,54 @@
+.fade-layout {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(-50vh + 30px);
+  height: 50vh;
+}
+.fade-layout-unfold {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(-50vh + 30px);
+  height: 50vh;
+}
+.fade-button {
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  cursor: pointer;
+}
+.transfrom {
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.fade-enter {
+  bottom: 0;
+  transition: all 0.3s;
+}
+
+.fade-enter-active {
+  bottom: 0;
+  transition: all 0.3s;
+}
+
+.fade-enter-done {
+  bottom: 0;
+  transition: all 0.3s;
+}
+
+.fade-exit {
+  bottom: 0;
+  transition: all 0.3s;
+}
+
+.fade-exit-active {
+  bottom: calc(-50vh + 30px);
+  transition: all 0.3s;
+}
+
+.down-exit-done {
+  bottom: calc(-50vh + 30px);
+  transition: all 0.3s;
+}

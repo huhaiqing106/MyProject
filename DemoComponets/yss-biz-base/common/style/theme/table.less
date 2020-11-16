@@ -1,0 +1,149 @@
+.ant-table-container {
+  border: 1px solid transparent;
+}
+.yss-configable-table {
+  height: 100%;
+  .yss-configable-table-inner,
+  .ant-spin-nested-loading,
+  .ant-spin-container,
+  .ant-table,
+  .ant-table-container,
+  .ant-table-content {
+    height: 100%;
+  }
+  table {
+    colgroup {
+      col:first-child:not([style]) {
+        width: 55px;
+      };
+    }
+  }
+  .ant-table-body {
+    height: calc(100% - 29px) !important;
+    overflow: scroll;
+    > table {
+      height: auto;
+    }
+  }
+}
+.doubleHeader {
+  .ant-table-body {
+    height: calc(100% - 58px) !important;
+  }
+}
+.darkStyle.blue {
+  .ant-table-container {
+    border-color: #1771a3;
+  }
+  .ant-spin-nested-loading {
+    border: 1px solid #1771a3 !important;
+  }
+  .stripe-table .ant-table-tbody .ant-table-row:not(.row-selected) > td {
+    color: #b5d8ff !important;
+  }
+  .columnBotton {
+    border: 1px solid #1771a3;
+    background-color: #444e69;
+  }
+  .yss-biz-table-click-tr td {
+    background-color: #24376c !important;
+  }
+  .ant-table-bordered .ant-table-tbody > tr > td {
+    border-right: 1px solid rgba(23, 113, 163, 1) !important;
+    border-bottom: 1px solid rgba(23, 113, 163, 1) !important;
+  }
+
+  .ant-table-bordered .ant-table-tbody .ant-table-measure-row,
+  .ant-table-bordered .ant-table-tbody .ant-table-placeholder,
+  .ant-table-bordered .ant-table-tbody tr.ant-table-measure-row td,
+  .ant-table-bordered .ant-table-tbody tr.ant-table-placeholder td {
+    border-bottom: none !important;
+  }
+  .ant-table .ant-table-placeholder,
+  .ant-table-bordered
+    .ant-table-tbody
+    tr.ant-table-placeholder:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td {
+    background-color: transparent !important;
+  }
+  .ant-table-bordered .ant-table-thead > tr > th,
+  .ant-table-bordered .ant-table-tbody > tr > td {
+    border-right: 1px solid rgba(23, 113, 163, 1) !important;
+  }
+  .ant-table-fixed-header
+    .ant-table-fixed-right
+    .ant-table-body-outer
+    .ant-table-fixed {
+    border: 0 !important;
+    border-left-color: #1771a3 !important ;
+  }
+  .ant-table-fixed-header
+    .ant-table-fixed-left
+    .ant-table-body-outer
+    .ant-table-fixed {
+    border: 0 !important;
+  }
+  .ant-table-bordered .ant-table-header {
+    overflow-y: scroll !important;
+  }
+  .ant-table-bordered .ant-table-header > table,
+  .ant-table-bordered .ant-table-body > table,
+  .ant-table-bordered .ant-table-fixed-left table,
+  .ant-table-bordered .ant-table-fixed-right table {
+    border-left-color: transparent !important ;
+    border-top-color: transparent !important;
+    border-right-color: transparent !important;
+  }
+  .ant-checkbox-inner {
+    background-color: #233c5b !important;
+    border: 1px solid #1771a3 !important;
+    .ant-checkbox-inner {
+      background-color: #233c5b !important;
+      border: 1px solid #1771a3 !important;
+      border-radius: 2px;
+      border-collapse: separate;
+      width: 14px;
+      height: 14px;
+    }
+  }
+  .ant-table-bordered.ant-table-empty .ant-table-placeholder {
+    border-right: 0 !important;
+    border-left: 0 !important;
+  }
+
+  .ant-checkbox-wrapper.ant-checkbox-wrapper-disabled {
+    .ant-checkbox-inner {
+      background-color: #999 !important;
+      border: 1px solid #48587e !important;
+    }
+  }
+  .yss-configable-table {
+    .ant-table-pagination.ant-pagination.mini {
+      .ant-pagination-item {
+        border: none;
+        background-color: transparent;
+      }
+      margin: 0;
+    }
+    .ant-pagination-total-text {
+      color: #b5b8c1;
+      margin-top: 1px;
+    }
+    .ant-pagination-item:focus a,
+    .ant-pagination-item:hover a {
+      color: #0d92cb;
+    }
+  }
+  .ant-table .ant-table-thead > tr > th {
+    border-bottom-color: #1771a3;
+  }
+  .ant-table .ant-table-tbody > tr > td {
+    border-bottom: none;
+  }
+  .ant-table.ant-table-bordered .ant-table-container {
+    border: none;
+  }
+  .ant-table.ant-table-bordered .ant-table-cell-fix-right-first::after {
+    border-color: #1771a3;
+  }
+}
