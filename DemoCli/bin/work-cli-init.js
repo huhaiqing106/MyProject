@@ -40,6 +40,7 @@ svnUltiMate.commands.checkout(svnUrl, projectName, { username: "huhq", password:
     console.log(chalk.green("\n Generation completed!"));
     console.log("\n To get started");
     console.log(`\n    cd ${projectName} \n`);
+    
   }
 });
 

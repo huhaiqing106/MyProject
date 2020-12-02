@@ -1,12 +1,12 @@
 {
-  "name": "hhq-cli",
+  "name": "work-cli",
   "version": "0.0.1",
-  "description": "dtxy cli",
+  "description": "work cli",
   "main": "index.js",
   "bin": {
-    "dtxy": "bin/dtxy-cli.js"
+    "work": "bin/work-cli.js"
   },
-  "author": "dtxy",
+  "author": "phil",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.0",
