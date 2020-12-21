@@ -10,7 +10,8 @@ program
   .usage('<command> [options]')
   // 后期扩展支持根据配置的地址初始化模板
   // .command("init-config", "generate a new project from a config template")
-  .command('init', 'generate a new project from a git template');
+  .command('init', 'generate a new project from git')
+  .command('create', 'create a new business page from git');
 
 // 解析命令行参数
 program.parse(process.argv);
