@@ -1,0 +1,25 @@
+<html>
+  <script>
+    function onload() {
+      const ulHtml = document.querySelector('#testId');
+      const childrens = ulHtml.children;
+      for (let index = 0; index < childrens.length; index++) {
+        const element = childrens[index];
+        element.onclick = (event) => {
+          if (index === 1) {
+            console.log(event)
+            event.preventDefault();
+            // window.location.href = 'https://react.docschina.org';
+          }
+        };
+      }
+    }
+  </script>
+  <body onload="onload()">
+    <ul id="testId">
+      <li><a href="http://www.baidu.com">百度</a></li>
+      <li><a href="http://www.google.com">谷歌</a></li>
+      <li><a href="http://www.github.com">GitHub</a></li>
+    </ul>
+  </body>
+</html>
