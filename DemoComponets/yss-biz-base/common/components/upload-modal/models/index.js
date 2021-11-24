@@ -1,4 +1,3 @@
-import lugiax from '@lugia/lugiax';
 const uploadFilesModel = lugiax.register({
   model: 'uploadFilesModel',
   state: {

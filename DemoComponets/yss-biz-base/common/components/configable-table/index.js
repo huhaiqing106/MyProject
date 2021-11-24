@@ -1,9 +1,8 @@
+import { message, Modal } from 'antd';
 import React from 'react';
-import { Table, Checkbox, Button, Modal, message } from 'antd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import CommonTable from '../common-table'
 import { DndProvider } from 'react-dnd';
-import { service } from "win-trade-base";
+import HTML5Backend from 'react-dnd-html5-backend';
+import CommonTable from '../common-table';
 
 class ConfigableTable extends React.Component {
   state = {

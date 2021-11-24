@@ -1,6 +1,5 @@
 import regexp from './regexp';
 import moment from 'moment';
-import SnowflakeId from 'snowflake-id';
 
 /**
  * 类型判断函数
@@ -861,13 +860,6 @@ export const getValue = (values, defaultValue = {}) => {
     return defaultValue;
   }
   return values;
-};
-
-/**
- * 雪花算法生成唯一id
- */
-export const createGuid = () => {
-  return new SnowflakeId().generate();
 };
 
 /**

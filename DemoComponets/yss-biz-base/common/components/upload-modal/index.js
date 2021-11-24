@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Modal, Row, Col, Button, Upload, Icon, Table, Progress } from 'antd';
-import { connect } from '@lugia/lugiax';
 import uploadFilesPop from './models';
 import './index.less';
 const { Dragger } = Upload;

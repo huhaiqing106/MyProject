@@ -1,7 +1,7 @@
-import React, { createContext } from "react";
+import React from "react";
 
 /**创建公共数据盒子 */
-export const PublicProps = createContext();
+export const PublicProps = React.createContext();
 
 /***弹框的默认属性***/
 export const modalInfo = {

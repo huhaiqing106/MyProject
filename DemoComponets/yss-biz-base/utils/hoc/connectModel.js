@@ -7,7 +7,6 @@
  */
 
 import React, { Component } from "react";
-import { connect } from "@lugia/lugiax";
 import { fromJS, is } from "immutable";
 
 export default (Components, file) => {

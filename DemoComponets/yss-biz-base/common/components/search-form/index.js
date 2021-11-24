@@ -7,7 +7,6 @@
 import { Button, Drawer, Form } from 'antd';
 import React, { Fragment, PureComponent } from 'react';
 import { isFunc } from 'yss-biz';
-import { FormValidItem } from 'win-trade-base';
 import itemList from '../registry';
 
 class SearchForm extends PureComponent {

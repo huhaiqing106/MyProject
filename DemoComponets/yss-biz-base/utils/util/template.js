@@ -3,7 +3,7 @@ import { page } from './constant';
 
 /**
  * 公共方法
- * 
+ *
  * @description setModalStatus 设置弹窗状态
  * @description setTrDatas 设置点击或选中行数据
  * @description setPages 设置分页
@@ -71,7 +71,7 @@ export const publicSync = {
 
 /**
  * 公共方法
- * 
+ *
  * @description _httpPageList 分页查询方法
  */
 export const publicAsync = {
@@ -90,7 +90,7 @@ export const publicAsync = {
     { getState }
   ) {
     let resPage = formatImmutable(state, relyKeys[0]);
-    params =  formatImmutable(state, relyKeys[1]);
+    params = formatImmutable(state, relyKeys[1]);
     let resValue = { ...defaultParams, ...params };
     params = filterNullElement(resValue);
     params = { ...resValue, ...resPage };
@@ -106,7 +106,7 @@ export const publicAsync = {
 
 /**
  * 公共state变量
- * 
+ *
  * @description page 页码
  * @description trDom 选中行的节点
  * @description query 模糊查询

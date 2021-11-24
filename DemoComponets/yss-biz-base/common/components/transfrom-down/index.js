@@ -2,7 +2,6 @@
  * 关联信息组件
  */
 import React, { PureComponent, Fragment } from 'react';
-import { Icon } from 'antd';
 import { CSSTransition } from 'react-transition-group';
 import './styles.less';
 import { isFunc } from 'yss-biz'
@@ -23,7 +22,6 @@ class TransfromDown extends PureComponent {
             <div className='fade-button'>
               <span className='fade-button-inner' onClick={this.toggleMore}>
                 关联信息
-                <Icon type={iconType} />
               </span>
             </div>
             {children[1]}

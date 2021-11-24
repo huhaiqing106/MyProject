@@ -1,12 +1,5 @@
-/*eslint-disable*/
-/**
- * @lzx
- * 自带样式的表单组件（可自动 换行 插入分割线 等 具体使用可参考文档）
- *  - mapOption 遍历 数据转换成 options 的方法
- */
 import React, { PureComponent, Fragment, useRef } from 'react';
 import { Form } from 'antd';
-import { FormValidItem } from 'win-trade-base';
 import itemList from '../registry';
 
 class NormForm extends PureComponent {
@@ -50,7 +43,7 @@ class NormForm extends PureComponent {
       typeof resetFields === 'function' && resetFields();
     }
   };
-  onValidate = async (done = () => { }, error = () => { }) => {
+  onValidate = async (done = () => {}, error = () => {}) => {
     const { validateFields } = this.formObject;
     validateFields((errors, values) => {
       if (!errors) {
@@ -125,7 +118,6 @@ class NormForm extends PureComponent {
                           width: labelSize,
                           marginTop: '5px',
                           height: '21px',
-
                         }}
                       >
                         <span
@@ -133,7 +125,7 @@ class NormForm extends PureComponent {
                           style={{
                             display: 'inline-block',
                             lineHeight: 1.1,
-                            verticalAlign: "middle",
+                            verticalAlign: 'middle',
                             ...labelStyle,
                           }}
                         >
@@ -164,17 +156,17 @@ class NormForm extends PureComponent {
                             {/* </Form.Item> */}
                           </FormValidItem>
                         ) : (
-                            <ItemType
-                              {...item}
-                              {...item.props}
-                              style={{
-                                border: (item.props || {}).readOnly ? 'none' : '',
-                                boxShadow: (item.props || {}).readOnly ? 'none' : '',
-                                backgroundColor: (item.props || {}).readOnly ? 'transparent' : '',
-                                ...(item.props || {}).style,
-                              }}
-                            />
-                          )}
+                          <ItemType
+                            {...item}
+                            {...item.props}
+                            style={{
+                              border: (item.props || {}).readOnly ? 'none' : '',
+                              boxShadow: (item.props || {}).readOnly ? 'none' : '',
+                              backgroundColor: (item.props || {}).readOnly ? 'transparent' : '',
+                              ...(item.props || {}).style,
+                            }}
+                          />
+                        )}
                       </li>
                     </ul>
                     <div

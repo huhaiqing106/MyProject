@@ -4,7 +4,6 @@ import HTML5Backend from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import BodyRow from "./BodyRow";
 import HeaderCell from "./HeaderCell";
-import EditComponent from "./EditComponent";
 import propTypes from "prop-types";
 import "./index.less";
 import { copyText, isFunc, findFaceLevelNode, ConfirmModal } from "yss-biz";
@@ -135,22 +134,6 @@ class ConfigableTable extends React.Component {
         render: (text, record, rowIndex) => {
           const { editType = "", render } = col;
           switch (true) {
-            case !!editType:
-              return (
-                <EditComponent
-                  editingKey={this.state.editingKey}
-                  column={col}
-                  defaultValue={text}
-                  rowObject={{ rowIndex, record }}
-                  setUpdatedRecords={(records) => {
-                    this.setState({
-                      updatedRecords: records,
-                    });
-                  }}
-                  updatedRecords={this.state.updatedRecords}
-                  parentProps={{ ...this.props }}
-                />
-              );
             case !editType && isFunc(render):
               return render(text, record, rowIndex);
             default:
