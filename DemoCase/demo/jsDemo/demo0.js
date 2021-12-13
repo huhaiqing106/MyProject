@@ -1,6 +1,8 @@
 /**
  * 你不知道的JavaScript习题
  */
+
+// map set
 void (function () {
   var m = new Map([["a", "foo"], ["b", "bar"]])
   console.log(m.get("a"));
