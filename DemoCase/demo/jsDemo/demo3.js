@@ -1,3 +1,6 @@
+/**
+ * 继承
+ */
 void (function () {
   function FooF() {
     this.x = 2;
@@ -112,6 +115,9 @@ void (function () {
   // console.log(x instanceof Foo);
 })();
 
+/**
+ * then 函数
+ */
 void (function () {
   console.log('\t');
   let th = {
